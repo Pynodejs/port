@@ -2,7 +2,7 @@
 
 
 PORTS_FILE="/ports.info.txt"
-ip=154.12.2.244
+ip="serveo.net"
 add_port() {
     local local_port=$1
     if [[ -z "$local_port" ]]; then
@@ -13,7 +13,7 @@ add_port() {
     local random_port
     random_port=$(shuf -i 1024-65535 -n 1)
 
-    ssh -o StrictHostKeyChecking=no -f -N -R ${random_port}:localhost:${local_port} ${ip} -p 65535 > /dev/null &
+    ssh -o StrictHostKeyChecking=no -f -N -R ${random_port}:localhost:${local_port} ${ip} > /dev/null &
     ssh_pid=$!
 
     echo "${random_port}:${local_port}" >> $PORTS_FILE
@@ -52,7 +52,7 @@ refresh_ports() {
         random_port=$(echo $line | cut -d':' -f1)
         local_port=$(echo $line | cut -d':' -f2)
 
-        ssh -o StrictHostKeyChecking=no -f -N -R ${random_port}:localhost:${local_port} ${ip} -p 65535 > /dev/null &
+        ssh -o StrictHostKeyChecking=no -f -N -R ${random_port}:localhost:${local_port} ${ip} > /dev/null &
     done < $PORTS_FILE
 
     echo "Ports have been successfully restarted."
